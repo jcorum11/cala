@@ -16,9 +16,9 @@ var setTimeBlocks = function() {
 }
 
 // add class tense
-var addClassTense = function(tense) {
-    $(".container").find(".row > div:nth-child(2)").each(function() {
-        $(this).addClass(tense);
+var addClassState = function(state, iteration) {
+    $(".container").find(`.row:nth-child(${iteration}) > div:nth-child(2)`).each(function() {
+        $(this).addClass(state);
     })
 }
 
@@ -36,6 +36,23 @@ setDate();
 setTimeBlocks();
 
 // check if blocks are in the past
-var timeList = $(".container").find(".hour").each(function() {
-    console.log($(this).text() );
-})
+var hourColorHandler = function() {
+    var i = 1
+    $(".container").find(".hour").each(function() {
+        var time = moment($(this).text(), "LT");
+        var timeBlockState = time.diff(moment(), "hours")
+        if ( timeBlockState < 0) {
+            addClassState("past", i);
+        }
+        else if (timeBlockState === 0) {
+            addClassState("present", i)
+        }
+        else if (timeBlockState > 0) {
+            addClassState("future", i)
+        }
+        i++
+    })
+}
+
+hourColorHandler();
+
