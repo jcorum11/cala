@@ -1,6 +1,6 @@
 body {
   font-family: 'Open Sans', sans-serif;
-  font-size: 14px;
+  font-size: 16px;
   line-height: 1;
 }
 
@@ -27,7 +27,7 @@ textarea {
 
 .time-block {
   text-align: center;
-  padding-top: 1rem;
+  border-radius: 15px;
 }
 
 .row {
