@@ -4,7 +4,6 @@ var setDate = function() {
     $("#currentDay").text(currentDay);
 }
 
-
 // put time in time blocks
 var setTimeBlocks = function() {
     var beginningOfDay = moment("8:00", "h:ss");
@@ -13,7 +12,6 @@ var setTimeBlocks = function() {
         $(this).text(beginningOfDay.format("LT"));
     })
 }
-
 
 setDate();
 setTimeBlocks();
