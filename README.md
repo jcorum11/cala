@@ -1,5 +1,4 @@
 # Timberframe
-a springy coding challenge
 
 ## Purpose
 A Stolid Calendar For A Structured Day
