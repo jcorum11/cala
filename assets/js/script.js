@@ -30,49 +30,44 @@ var timeIndex = [
 // - load events
 // - ensure persistency
 
-$(".row > div:nth-child(2)").click(function() {
+// INPUT HANDLERS
+// hour block event listener to change div to textarea when clicked
+$(".text").click(function() {
     var text = $(this).text().trim();
-    var eventInput = $("<textarea>").addClass("col-sm-12").val(text);
+    var eventInput = $("<textarea>").addClass("text col-sm-10").val(text);
     $(this).replaceWith(eventInput);
     eventInput.trigger("focus");
+    setHourColor();
 });
 
-$(".row").on("blur", "textarea", function() {
+// textarea event listener to change textarea to div when it loses focus
+$(".text").on("blur", function() {
     var text = $(this).text().trim();
-    var eventDiv = $("<div>").addClass("col-sm-12").val(text);
+    var eventDiv = $("<div>").addClass("text col-sm-10").val(text);
     $(this).replaceWith(eventDiv);
+    setHourColor();
 })
 
-//event handlers
-var loadEvent = function() {
-    var events = JSON.parse(localStorage.getItem("events"));
-    if (events) {
-        events.forEach(e => {
-            var hourBlock = $("body").find(`.container:nth-child(${timeIndex.indexOf[e.time] + 1}) > div:nth-child(2) > p`);
-            console.log(hourBlock);
-        });
-    }
-}
-loadEvent()
-
-//save button
-$(".saveBtn").click(function (e) { 
-    e.preventDefault();
-    var eventText = $(this).closest("div").text();
-    var eventTime = $(this).closest(".hour").text();
-    events.push({
-        text: eventText, 
-        time: eventTime
-    });
-    localStorage.setItem("events", JSON.stringify(events));
-});
-
-// set date in header
-var setDate = function() {
-    $("#currentDay").text(currentDay);
+// STATE HANDLERS
+// checks hour block time against current time and changes color accordingly
+var setHourColor = function() {
+    $(".container").find(".hour").each(function() {
+        var time = moment($(this).text(), "LT");
+        var timeBlockState = time.diff(moment(), "hours");
+        var textEl = $(this).next();
+        if (timeBlockState < 0) {
+            textEl.addClass("past")
+        }
+        else if (timeBlockState === 0) {
+            textEl.addClass("present")
+        }
+        else if (timeBlockState > 0) {
+            textEl.addClass("future")
+        }
+    })
 }
 
-// put time in time blocks beginning at 9:00am and ending at 5:00pm
+// puts time in time blocks beginning at 9:00am and ending at 5:00pm
 var setTimeBlocks = function() {
     // set beginning to 8:00 am so we can add 1 and start at 9:00am
     $(".container").find(".hour").each(function() {
@@ -81,38 +76,6 @@ var setTimeBlocks = function() {
         $(this).text(beginningOfDay.format("LT"));
     })
 }
-
-// add class tense
-var addClassState = function(state, iteration) {
-    $(".container").find(`.row:nth-child(${iteration}) > div:nth-child(2)`).each(function() {
-        $(this).addClass(state);
-    })
-}
-
-// check if blocks are in the past
-var setHourColor = function() {
-    var i = 1
-    $(".container").find(".hour").each(function() {
-        var time = moment($(this).text(), "LT");
-        var timeBlockState = time.diff(moment(), "hours")
-        if ( timeBlockState < 0) {
-            addClassState("past", i);
-        }
-        else if (timeBlockState === 0) {
-            addClassState("present", i)
-        }
-        else if (timeBlockState > 0) {
-            addClassState("future", i)
-        }
-        i++
-    })
-}
-
-var createEvent = function() {
-    var eventP = $("<p>").addClass("description");
-}
-
-
 
 // put icon in button class
 var setButtonIcon = function() {
@@ -123,9 +86,38 @@ var setButtonIcon = function() {
     })
 }
 
+// set current day in header
+var setDate = function() {
+    $("#currentDay").text(currentDay);
+}
+
+// EVENT HANDLERS
+// load events into hour blocks
+var loadEvent = function() {
+    var events = JSON.parse(localStorage.getItem("events"));
+    if (events[1]) {
+        for (var e = 0; e < events.length; e++) {
+            var evnt = events[e]
+            for (var i = 0; i < timeIndex.length; i++) {
+                if (evnt.time === timeIndex[i]) {
+                    $(".text").text(events[e][text])
+                }
+            }
+        }
+    }
+}
+loadEvent()
+
+// event listener to save when save buttons clicked 
 $(".saveBtn").click(function (e) { 
     e.preventDefault();
-    
+    var eventText = $(this).closest("div").text();
+    var eventTime = $(this).closest(".hour").text();
+    events.push({
+        text: eventText, 
+        time: eventTime
+    });
+    localStorage.setItem("events", JSON.stringify(events));
 });
 
 setDate();
