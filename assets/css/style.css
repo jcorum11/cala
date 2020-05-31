@@ -73,3 +73,7 @@ textarea {
 footer {
   height: 3rem;
 }
+
+footer div {
+  width: 90%;
+}

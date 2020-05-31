@@ -53,7 +53,8 @@ $(".text").on("blur", function() {
 var setHourColor = function() {
     $(".container").find(".hour").each(function() {
         var time = moment($(this).text(), "LT");
-        var timeBlockState = time.diff(moment(), "hours");
+        var timeBlockState = Math.ceil(time.diff(moment(), "hours", true));
+        console.log(timeBlockState);
         var textEl = $(this).next();
         if (timeBlockState < 0) {
             textEl.addClass("past")
