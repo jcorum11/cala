@@ -1,7 +1,6 @@
 var currentDay = moment().format("LL LT");
 var currentTime = moment();
 var beginningOfDay = moment("8:00", "h:ss");
-var events = []
 var timeIndex = [
     "9:00 AM",
     "10:00 AM",
@@ -13,6 +12,7 @@ var timeIndex = [
     "4:00 pM",
     "5:00 pM"
 ]
+var events = JSON.parse(localStorage.getItem("events"));
 //save funct
 //load funct
 //past str
@@ -93,26 +93,25 @@ var setDate = function() {
 
 // EVENT HANDLERS
 // load events into hour blocks
-var loadEvent = function() {
-    var events = JSON.parse(localStorage.getItem("events"));
-    if (events[1]) {
-        for (var e = 0; e < events.length; e++) {
-            var evnt = events[e]
-            for (var i = 0; i < timeIndex.length; i++) {
-                if (evnt.time === timeIndex[i]) {
-                    $(".text").text(events[e][text])
-                }
-            }
-        }
+var loadEvents = function() {
+    if (events) {
+        events.forEach(evnt => {
+            console.log();
+            var hour = $(`.hour:contains(${evnt.time.trim()})`);
+            hour.siblings(".text").text(evnt.text);
+        });
     }
 }
-loadEvent()
+
 
 // event listener to save when save buttons clicked 
 $(".saveBtn").click(function (e) { 
     e.preventDefault();
-    var eventText = $(this).closest("div").text();
-    var eventTime = $(this).closest(".hour").text();
+    var eventText = $(this).siblings(".text").val();
+    var eventTime = $(this).siblings(".hour").text();
+    if (!events) {
+        events = [];
+    }
     events.push({
         text: eventText, 
         time: eventTime
@@ -123,4 +122,5 @@ $(".saveBtn").click(function (e) {
 setDate();
 setTimeBlocks();
 setHourColor();
-setButtonIcon()
+setButtonIcon();
+loadEvents()
