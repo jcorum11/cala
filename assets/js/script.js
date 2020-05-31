@@ -1,6 +1,7 @@
 var currentDay = moment().format("LL LT");
 var currentTime = moment();
 var beginningOfDay = moment("8:00", "h:ss");
+var events = JSON.parse(localStorage.getItem("events"));
 var timeIndex = [
     "9:00 AM",
     "10:00 AM",
@@ -12,23 +13,6 @@ var timeIndex = [
     "4:00 pM",
     "5:00 pM"
 ]
-var events = JSON.parse(localStorage.getItem("events"));
-//save funct
-//load funct
-//past str
-//present str
-//future str
-//state handler
-// - put current day in header
-// - check event time against current time
-// - keep track of event states
-// - ensure states are updated
-//input handler
-// - change html
-//event handler
-// - save events
-// - load events
-// - ensure persistency
 
 // INPUT HANDLERS
 // hour block event listener to change div to textarea when clicked
@@ -81,9 +65,9 @@ var setTimeBlocks = function() {
 // put icon in button class
 var setButtonIcon = function() {
     $(".container").find("button").each(function() {
-        var spanEl = $("<span>")
+        var iEl = $("<i>")
             .addClass("fas fa-save")
-        $(this).append(spanEl);
+        $(this).append(iEl);
     })
 }
 
